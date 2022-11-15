@@ -408,6 +408,12 @@ for file_last_name in file_list:
     rule23= ctrl.Rule(position1['good'] & keywords['good'] & cos_similarity['good'] & numtokens['good'] | tf_isf['good'], senten['good'])
     rule24= ctrl.Rule(position1['good'] & keywords['poor'] & cos_similarity['good'] & numtokens['average'] | tf_isf['good'], senten['avg'])
     rule25= ctrl.Rule(position1['poor'] & keywords['poor'] & cos_similarity['poor'] & numtokens['poor'] | tf_isf['poor'], senten['bad'])
+    rule26= ctrl.Rule(position1['good'] & propernoun('good') & keywords['poor'] & cos_similarity['poor'] & numtokens['poor'] | tf_isf['good'], senten['avg'])
+    rule27= ctrl.Rule(position1['good'] & propernoun('good') & keywords['good'] & cos_similarity['poor'] & numtokens['good'] | tf_isf['good'], senten['good'])
+    rule28= ctrl.Rule(position1['good'] & propernoun('good') & keywords['good'] & cos_similarity['good'] & numtokens['poor'] | tf_isf['good'], senten['good'])
+    rule29= ctrl.Rule(position1['good'] & propernoun('good') & keywords['poor'] & cos_similarity['good'] & numtokens['poor'] | tf_isf['average'], senten['avg'])
+    rule30= ctrl.Rule(position1['poor'] & propernoun('poor') & keywords['poor'] & cos_similarity['poor'] & numtokens['poor'] | tf_isf['good'], senten['poor'])
+
 
     
 
