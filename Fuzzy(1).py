@@ -12,7 +12,7 @@ root = Tk()
 my_filetypes = [('all files', '.*'), ('text files', '.txt')]
 f_value_arr=[]
 # root.filename1 =  filedialog.askopenfilename(title="D:\summary.txt",filetypes=my_filetypes)
-file_list=['001.txt']
+file_list=['001.txt','002.txt','003.txt','004.txt','005.txt','006.txt','007.txt','008.txt','009.txt']
 # for i in range(1):
 #     if(i!=20):
 #         file_list.append("0"+str(i)+".txt")
@@ -138,7 +138,7 @@ for file_last_name in file_list:
             vectors.append(vector)
         return vectors
     VSM=convertToVSM(sentences)
-    print("SentenceVectors:",VSM)
+    # print("SentenceVectors:",VSM)
     # print("\n")
 
 
@@ -354,8 +354,8 @@ for file_last_name in file_list:
     senten['avg'] = fuzz.trimf(senten.universe, [0, 50, 100])
     senten['good'] = fuzz.trimf(senten.universe, [50, 100, 100])
     
-    senten.view()
-    input()
+    # senten.view()
+    # input()
 
     rule1 = ctrl.Rule(position1['good'] & sentencelength['good'] & propernoun['good'] &numtokens['good'], senten['good'])
     rule2 = ctrl.Rule(position1['poor'] & sentencelength['poor'] & numtokens['poor'], senten['bad'])
@@ -403,9 +403,10 @@ for file_last_name in file_list:
 
     
 
-    rule_list=[rule1,rule2,rule3,rule4,rule5,rule6,rule7,rule8,
-    rule9,rule10,rule11,rule12,rule13,rule14,rule15,rule16,rule17,
-    rule18,rule19,rule20,rule21,rule21,rule22,rule23,rule24,rule25]
+    rule_list=[rule1,rule2,rule3,rule4,rule5,rule17,rule18]
+    # ,rule6,rule7,rule8,
+    # rule9,rule10,rule11,rule12,rule13,rule14,rule15,rule16,rule17,
+    # rule18,rule19,rule20,rule21,rule21,rule22,rule23,rule24,rule25
     sent_ctrl = ctrl.ControlSystem(rule_list)
     Sent = ctrl.ControlSystemSimulation(sent_ctrl)
     fuzzemptyarr= np.empty((20,1,2), dtype=object)
