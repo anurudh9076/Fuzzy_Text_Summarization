@@ -16,7 +16,7 @@ from rouge import Rouge
  # Structure and Layout
 window = Tk()
 window.title("Summaryzer GUI")
-window.geometry("700x400")
+window.geometry("780x400")
 window.config(background='black')
 
 style = ttk.Style(window)
@@ -55,6 +55,8 @@ tab_control.pack(expand=1, fill='both')
 
 
 def getSummary(text):
+    
+    
     import numpy as np
     from nltk import sent_tokenize
     sentences=(sent_tokenize(text))
@@ -432,8 +434,11 @@ def getSummary(text):
     # rule18,rule19,rule20,rule21,rule21,rule22,rule23,rule24,rule25
     sent_ctrl = ctrl.ControlSystem(rule_list)
     Sent = ctrl.ControlSystemSimulation(sent_ctrl)
-    fuzzemptyarr= np.empty((2,1,2), dtype=object)
+    summary_len=int(lenInput.get())
+    fuzzemptyarr= np.empty((summary_len,1,2), dtype=object)
     t2=0
+    
+
     summary2=[]
     for s in range(len(sentences)):
         Sent.input['position1'] = int(position[s])
@@ -447,7 +452,7 @@ def getSummary(text):
         Sent.input['numtokens'] = int(numeric_token[s])
     #Sent.input['service'] = 2
         Sent.compute()
-        if Sent.output['senten'] > 50 and t2<2:
+        if Sent.output['senten'] > 50 and t2<summary_len:
             summary2.append((sentences[s]))
             fuzzemptyarr[t2][0][0] = sentences[s]
             fuzzemptyarr[t2][0][1] = s
@@ -669,14 +674,25 @@ b0.grid(row=3,column=0,padx=10,pady=10)
 b1=Button(tab2,text="Reset ", width=12,command=clear_text_file,bg="#b9f6ca")
 b1.grid(row=3,column=1,padx=10,pady=10)
 
-b2=Button(tab2,text="Summarize", width=12,command=get_file_summary,bg='blue',fg='#fff')
-b2.grid(row=3,column=2,padx=10,pady=10)
+
+  
+# creating a entry for input
+# name using widget Entry
+
+length_label = tk.Label(tab2, text = 'Summary Length', font=('calibre',10,'bold'))
+length_label.grid(row=3,column=2,padx=1,pady=1)
+lenInput = tk.Entry(tab2,width=3, font=('calibre',10,'normal'))
+lenInput.grid(row=4,column=2)
+lenInput.insert(0, "10")
 
 b3=Button(tab2,text="Clear Result", width=12,command=clear_text_result)
-b3.grid(row=5,column=1,padx=10,pady=10)
+b3.grid(row=5,column=0,padx=10,pady=10)
 
 b4=Button(tab2,text="Close", width=12,command=window.destroy)
-b4.grid(row=5,column=2,padx=10,pady=10)
+b4.grid(row=5,column=1,padx=10,pady=10)
+
+b2=Button(tab2,text="Summarize", width=12,command=get_file_summary,bg='blue',fg='#fff')
+b2.grid(row=5,column=2,padx=10,pady=10)
 
 # Display Screen
 # tab2_display_text = Text(tab2)
