@@ -1,9 +1,5 @@
 from tkinter import *
-from tkinter import filedialog
-from rouge import Rouge 
-import os
 import numpy as np
-#import rake_nltk
 
 
 
@@ -13,17 +9,16 @@ f_value_arr=[]
 # root.filename1 =  filedialog.askopenfilename(title="D:\summary.txt",filetypes=my_filetypes)
 file_list=[]
 
-for i in range(1,10,1):
-    if(i!=20):
-        file_list.append("00"+str(i)+".txt")
-
-for i in range(10,21,1):
-    if(i!=20):
+for i in range(3,4,1):
+    if(i//10):
         file_list.append("0"+str(i)+".txt")
+    else:
+        file_list.append("00"+str(i)+".txt")
+        
 
 rouge_list=[]
 maxLen=21
-for summary_length in range(1,maxLen,1):
+for summary_length in range(20,maxLen,1):
 
     for file_last_name in file_list:
         file_name=r'C:\Users\Hp\Desktop\Major_Fuzzy\data\bbc_news_data\article\business'+'\\'+file_last_name
@@ -99,33 +94,18 @@ for summary_length in range(1,maxLen,1):
 
         sent_position= (position(sentences))
         num_sent=len(sent_position)
-        # print("sentence position:",sent_position)
-        # print("\n")
-        # print("Total number of sentences:",num_sent)
-        # print("\n")
-        #th= 0.2*num_sent
-        #minv=th*num_sent
-        #maxv=th*2*num_sent
+
         position = []
-        position_rbm = []
-        sent_pos1_rbm = 1
+        
         sent_pos1 = 100
         position.append(sent_pos1)
-        position_rbm.append(sent_pos1_rbm)
         for x in range(1,num_sent-1):
-            #s_p = (math.cos((sent_position[x]-minv)*((1/maxv)-minv)))*100
-            #if s_p < 0:
-            #   s_p = 0
             s_p= ((num_sent-x)/num_sent)*100
             position.append(s_p)
-            s_p_rbm = (num_sent-x)/num_sent
-            position_rbm.append(s_p_rbm)
             
         sent_pos2 = 100
-        sent_pos2_rbm = 1
         position.append(sent_pos2)
-        position_rbm.append(sent_pos2_rbm)
-        # print("Sentence position feature vector:",position_rbm)
+        # print("Sentence position feature vector:",position)
         # print("\n")
 
 
@@ -175,21 +155,14 @@ for summary_length in range(1,maxLen,1):
         tfvec=[]
         isfvec=[]
         tfisfvec=[]
-        tfisfvec_rbm=[]
+        # tfisfvec_rbm=[]
         for i in range(sentencelength):
             x,y,z=calcMeanTF_ISF(VSM,i)
             tfvec.append(x)
             isfvec.append(y)
             tfisfvec.append(z*100)
-            tfisfvec_rbm.append(z)
-        #print("TF vector:",tfvec)
-        #print("\n")
-        #print("ISF vector:",isfvec)
-        #print("\n")
-        #tfisf1= [(int(p)*100) for p in tfisfvec]
-        # print("TF-ISF vector:",tfisfvec_rbm)
-        # print("\n")
-        maxtf_isf=max(tfisfvec_rbm)
+
+        maxtf_isf=max(tfisfvec)
         centroid=[]
         centroid.append(maxtf_isf)
         # print("Max TF-ISF:",centroid)
@@ -206,15 +179,12 @@ for summary_length in range(1,maxLen,1):
         from numpy import dot
         from numpy.linalg import norm
         cosine_similarity=[]
-        cosine_similarity_rbm=[]
         for z in range(sentencelength):
             cos_simi = ((dot(centroid, VSM[z])/(norm(centroid)*norm(VSM[z])))*100)
             cosine_similarity.append(cos_simi)
-            cos_simi_rbm = (dot(centroid, VSM[z])/(norm(centroid)*norm(VSM[z])))
-            cosine_similarity_rbm.append(cos_simi_rbm)
+            
         # print("Cosine Similarity Vector:",cosine_similarity_rbm)
         # print("\n")
-
 
 
 
@@ -228,12 +198,6 @@ for summary_length in range(1,maxLen,1):
             sent_word.append(a)
         #print("Number of words in each sentence:",sent_word)
         #print("\n")
-        #sent_leng=[]
-        #for x in range(len(sentences)):
-        #   if sent_word[x] < 3:
-        #      sent_leng.append(0)
-        #  else:
-        #     sent_leng.append(1)
 
         ##OR BY THIS METHOD: LENGTH OF SENTENCE/ LONGEST SENTENCE
         longest_sent=max(sent_word)
@@ -241,10 +205,7 @@ for summary_length in range(1,maxLen,1):
         sent_length_rbm=[]
         for x in sent_word:
             sent_length.append((x/longest_sent)*100)
-            sent_length_rbm.append(x/longest_sent)
-        #print(sent_length)
-
-        # print("Sentence length feature vector:",sent_length_rbm)
+        # print("Sentence length feature vector:",sent_length)
         # print("\n")
 
 
@@ -255,18 +216,14 @@ for summary_length in range(1,maxLen,1):
         import re
         num_word=[]
         numeric_token=[]
-        numeric_token_rbm=[]
         for u in range(len(sentences)):
             sent_split4=sentences[u].split(" ")
             e=re.findall("\d+",sentences[u])
             noofwords=(len(e))
             num_word.append(noofwords)
             numeric_token.append((num_word[u]/sent_word[u])*100)
-            numeric_token_rbm.append(num_word[u]/sent_word[u])
         #print("Numeric word count in each sentence:",num_word)
         #print("\n")
-        # print("Numeric token feature vector:",numeric_token_rbm)
-        # print("\n")
 
 
 
@@ -293,36 +250,23 @@ for summary_length in range(1,maxLen,1):
         #print(total_keywords)
 
         thematic_number= []
-        thematic_number_rbm= []
         for x in l_keywords:
             thematic_number.append((x/total_keywords)*100)
-            thematic_number_rbm.append(x/total_keywords)
-        # print("Thematic word feature", thematic_number_rbm)
+        # print("Thematic word feature", thematic_number)
         # print("\n")
-
-
 
         # # proper noun feature
         from nltk.tag import pos_tag
         from collections import Counter
         pncounts = []
-        pncounts_rbm = []
         for sentence in sentences:
             tagged=nltk.pos_tag(nltk.word_tokenize(str(sentence)))
             counts = Counter(tag for word,tag in tagged if tag.startswith('NNP') or tag.startswith('NNPS'))
             f=sum(counts.values())
             pncounts.append(f)
-            pncounts_rbm.append(f)
         pnounscore=[(int(o) / int(p))*100 for o,p in zip(pncounts, sent_word)]
-        pnounscore_rbm=[int(o) / int(p) for o,p in zip(pncounts_rbm, sent_word)]
         # #print(pncounts)
-        # print("Pronoun feature vector",pnounscore_rbm)
         # print("\n")
-
-
-
-
-
 
         import numpy as np
         import matplotlib
@@ -356,6 +300,7 @@ for summary_length in range(1,maxLen,1):
         keywords.automf(3)
         tf_isf.automf(3)
 
+        
 
         senten['bad'] = fuzz.trimf(senten.universe, [0, 0, 50])
         senten['avg'] = fuzz.trimf(senten.universe, [0, 50, 100])
@@ -407,13 +352,14 @@ for summary_length in range(1,maxLen,1):
         rule40= ctrl.Rule(propernoun['poor'] & sentencelength['poor'] & keywords['poor'] & cos_similarity['poor'], senten['bad'])
 
 
+        #senten.view()
+        #input()
 
-        
-
-        rule_list=[rule1,rule2,rule3,rule4,rule5,rule17,rule18]
+        rule_list=[rule1,rule2,rule3,rule4,rule5,
         # ,rule6,rule7,rule8,
         # rule9,rule10,rule11,rule12,rule13,rule14,rule15,rule16,rule17,
-        # rule18,rule19,rule20,rule21,rule21,rule22,rule23,rule24,rule25
+        # rule18,rule19,rule20,rule21,rule22,rule23,rule24,rule25]
+        ]
         sent_ctrl = ctrl.ControlSystem(rule_list)
         Sent = ctrl.ControlSystemSimulation(sent_ctrl)
         fuzzemptyarr= np.empty((summary_length,1,2), dtype=object)
@@ -431,6 +377,7 @@ for summary_length in range(1,maxLen,1):
             Sent.input['numtokens'] = int(numeric_token[s])
         #Sent.input['service'] = 2
             Sent.compute()
+            
             if Sent.output['senten'] > 50 and t2<summary_length:
                 summary2.append((sentences[s]))
                 fuzzemptyarr[t2][0][0] = sentences[s]
@@ -442,17 +389,8 @@ for summary_length in range(1,maxLen,1):
             fuzzarray[i][0][1] = fuzzemptyarr[i][0][1]
             
         fuzzarray=fuzzarray[1:]
-        # print("Fuzzy logic summary \n\n",summary2)
-
-        # print("before n removal summary is \n")
-        # print(summary2)
 
         res_summary=""
-
-        #  for i in range(len(summary2)):
-        #      summary2[i]=summary2[i].strip()
-
-
         summary3=[]
         import re
         for i in summary2 :
@@ -460,33 +398,6 @@ for summary_length in range(1,maxLen,1):
 
         for i in range(len(summary3)):
             res_summary+=summary3[i]
-
-        # print("after n removal summary is \n")
-        # print(res_summary)
-
-
-            # res_summary= res_summary.strip()
-
-
-        # res_summary=res_summary.replace(' '+"/n"+' ',' ')
-
-        # print(res_summary)
-
-
-
-
-        # root.filename2 =  filedialog.askopenfilename(title="D:\summary.txt",filetypes=my_filetypes)
-        # roo/t.withdraw()
-
-        # hypothesis = open(root.filename2).read() 
-
-        # reference = "this page includes the show transcript use the transcript to help students with reading comprehension and     vocabulary at the bottom of the page , comment for a chance to be mentioned on cnn student news . you must be a teac    her or a student age # # or older to request a mention on the cnn student news roll call . the weekly newsquiz tests     students ' knowledge of even ts in the news"
-
-
-        # print(res_summary)
-        # rouge = Rouge()
-        # scores = rouge.get_scores(hypothesis, res_summary)
-
 
         from rouge import FilesRouge
 
@@ -496,15 +407,15 @@ for summary_length in range(1,maxLen,1):
         file1.write(res_summary)
         file1.close()
 
-        # print("success 1")
-        # print(x)
         print(file_last_name)
-        print("text is ================================================>\n")
-        print(text)
+        # print("text is ================================================>\n")
+        # print(text)
 
         print("summary is ================================================>\n")
         print(res_summary)
         print(len(res_summary))
+        if(len(res_summary)==0):
+            continue
         hyp_path=r'C:\Users\Hp\Desktop\Major_Fuzzy\data\bbc_news_data\summaries\Hypothesis\business'+r'\\'+file_last_name
         ref_path=r'C:\Users\Hp\Desktop\Major_Fuzzy\data\bbc_news_data\summaries\reference\001.txt'
 
@@ -547,7 +458,7 @@ for summary_length in range(1,maxLen,1):
 # importing the required module
 import matplotlib.pyplot as plt
 summaryLen=[]
-for i in range(1,maxLen,1):
+for i in range(1,len(rouge_list)+1,1):
     summaryLen.append(i)
   
 # plotting the points 
@@ -559,7 +470,7 @@ plt.xlabel('Summary Length')
 plt.ylabel('Rouge-1 Value')
   
 # giving a title to my graph
-plt.title('Analysy on length of summary')
+plt.title('Analysis on length of summary')
   
 # function to show the plot
 plt.show()

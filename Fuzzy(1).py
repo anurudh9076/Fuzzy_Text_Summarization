@@ -12,9 +12,9 @@ my_filetypes = [('all files', '.*'), ('text files', '.txt')]
 f_value_arr=[]
 # root.filename1 =  filedialog.askopenfilename(title="D:\summary.txt",filetypes=my_filetypes)
 file_list=['001.txt','002.txt','003.txt','004.txt','005.txt','006.txt','007.txt','008.txt','009.txt']
-for i in range(10,21,1):
-    if(i!=20):
-        file_list.append("0"+str(i)+".txt")
+# for i in range(10,21,1):
+#     if(i!=20):
+#         file_list.append("0"+str(i)+".txt")
 
 
 for file_last_name in file_list:
@@ -348,6 +348,7 @@ for file_last_name in file_list:
     keywords.automf(3)
     tf_isf.automf(3)
 
+    
 
     senten['bad'] = fuzz.trimf(senten.universe, [0, 0, 50])
     senten['avg'] = fuzz.trimf(senten.universe, [0, 50, 100])
